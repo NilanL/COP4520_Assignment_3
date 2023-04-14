@@ -29,7 +29,8 @@ To ensure that the algorithm was correctly functioning, I added multiple tempora
 ## Part 2
 
 ### Methodology
-
+I created a lock-based array list implementation for the storing of sensor readings, one for each sensor 8 total.
+I then stored each lock-based array list within a larger array list which represents one minute of time. With each minute having each sensor write its reading into it's own respective area in the lock-based array list. I used a custom exception "SensoReadingCancelledException" for when the current reading has not yet finished operation, but a new reading must be inititated. 
 
 ### Experimental Evaulation
 
