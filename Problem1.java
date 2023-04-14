@@ -8,7 +8,7 @@ public class Problem1 {
     PresentRunnable [] helperRunnables;
 
     static final int THREAD_COUNT = 4;
-    static final int PRESENTS_COUNT = 500;//500000;
+    static final int PRESENTS_COUNT = 500000;
     volatile ConcurrentLinkedList<Integer> presentChain;
     volatile List<Integer> unorderedPresents;
     volatile Integer headPresent;
@@ -95,9 +95,6 @@ public class Problem1 {
             {
                 synchronized(this)
                 {
-                    // View vase
-                    //System.out.println("Guest #" + (guestNumber + 1) + " has viewed the vase");
-                    //boolean actionIncomplete = true;
                     int action = this.rand.nextInt(3) + 1;
 
                     switch (action)
@@ -105,48 +102,35 @@ public class Problem1 {
                         case 1: // Add present to list
                             if (unorderedPresents.size() > 0)
                             {
-                                //System.out.println("case " + action + " add");
                                 this.addPresent();
-                                //actionIncomplete = false;
                             }
                             else if (presentChain.length() > 2)
                             {
-                                //System.out.println("case " + action + " thank you");
-
                                 this.writeThankYou();
                             }
                             else
                             {
-                                //System.out.println("No more presents can be added to the chain");
+                                System.out.println("No more presents can be added to the chain");
                             }
                             break;
                         case 2: // Write thank you letter
                             if (presentChain.length() > 2)
                             {
-                                //System.out.println("case " + action + " thank you");
-
                                 this.writeThankYou();
-                                //actionIncomplete = false;
                             }
                             else if (unorderedPresents.size() > 0)
                             {
-                                //System.out.println("case " + action + " add");
-
                                 this.addPresent();
                             }
                             break;
                         case 3: // Check present
                             if (presentChain.length() > 2)
                             {
-                                //System.out.println("case " + action + " check");
-
                                 this.checkPresent();
-                                //actionIncomplete = false;
                             }
                             break;
                     }
 
-                    //System.out.println("-------------> " + presentChain.length() + " ");
                     try 
                     {
                         this.wait();
@@ -187,18 +171,14 @@ public class Problem1 {
 
         while (presentChain.length() > 2 || !unorderedPresents.isEmpty())
         {
-            //System.out.println(presentChain.length() + " " + unorderedPresents.size());
             int index = rand.nextInt(THREAD_COUNT);
 
             if (threads[index].getState().equals(Thread.State.NEW))
             {
-                //System.out.println(threads[index].getId() + " started");
-
                 threads[index].start();
             }
             else
             {
-                //System.out.println(threads[index].getId() + " woken");
                 helperRunnables[index].wake();
             }
         }
